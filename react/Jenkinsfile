@@ -1,0 +1,77 @@
+pipeline {
+  agent any
+  parameters {
+    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+  }
+  triggers {
+    pollSCM('* * * * 1-7')
+  }
+  stages {
+    stage('Build') {
+      steps {
+        echo "BUILD_ID: ${env.BUILD_ID}"
+        echo "BUILD_NUMBER: ${env.BUILD_NUMBER}"
+        echo "BUILD_TAG: ${env.BUILD_TAG}"
+        echo "BUILD_URL: ${env.BUILD_URL}"
+        echo "EXECUTOR_NUMBER: ${env.EXECUTOR_NUMBER}"
+        echo "JAVA_HOME: ${env.JAVA_HOME}"
+        echo "JENKINS_URL: ${env.JENKINS_URL}"
+        echo "JOB_NAME: ${env.JOB_NAME}"
+        echo "NODE_NAME: ${env.NODE_NAME}"
+        echo "WORKSPACE: ${env.WORKSPACE}"
+      }
+    }
+    stage('Test') {
+      steps {
+        echo "Hello ${params.PERSON}"
+
+        echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
+
+        echo "PROJECT_NAME: ${env.PROJECT_NAME}"
+        echo "BUILD_STATUS: ${env.BUILD_STATUS}"
+        echo "BRANCH_NAME: ${env.BRANCH_NAME}"
+
+        sh 'date'
+      }
+    }
+    stage('Sonarqube') {
+      steps {        
+        sh'''
+        docker run \
+        --rm \
+        -e SONAR_HOST_URL="http://sonarqube.app.internal" \
+        -v "$PWD/src/src:/usr/src" \
+        sonarsource/sonar-scanner-cli \
+        -Dsonar.projectKey=react
+        '''
+      }
+    }
+    stage('Deploy') {
+      parallel {
+        stage('Deploy to staging') {
+          steps {
+            echo 'staging'
+          }
+        }
+        stage('Deploy to production') {
+          steps {
+            echo 'production'
+          }
+        }
+      }
+    }
+  }
+  post {
+    always {
+      echo 'always'
+    }
+    success {
+      echo 'success'
+      // mail to: 'team@example.com', subject: 'The Pipeline succeeded :)', body: 'body'
+    }
+    failure {
+      echo 'failure'
+      // mail to: 'team@example.com', subject: 'The Pipeline failed :(', body: 'body'
+    }
+  }
+}

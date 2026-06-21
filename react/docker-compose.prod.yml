@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      target: prod
+    image: registry.$DOMAIN_NAME/movie:react-prod
+    ports:
+      - 80:80

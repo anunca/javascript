@@ -1,0 +1,53 @@
+service: app
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    DYNAMODB_TABLE: item
+    DYNAMODB_URL: http://db:8000
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+  serverless-offline:
+    host: 0.0.0.0
+    port: 3000
+
+functions:
+  create:
+    handler: item/create.create
+    events:
+      - http:
+          path: item
+          method: post
+  list:
+    handler: item/list.list
+    events:
+      - http:
+          path: item
+          method: get
+  get:
+    handler: item/get.get
+    events:
+      - http:
+          path: item/{id}
+          method: get
+  update:
+    handler: item/update.update
+    events:
+      - http:
+          path: item/{id}
+          method: put
+  remove:
+    handler: item/remove.remove
+    events:
+      - http:
+          path: item/{id}
+          method: delete

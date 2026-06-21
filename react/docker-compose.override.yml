@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_IMAGE:
+        NGINX_VERSION:
+    environment:
+      HOST:
+      PORT:

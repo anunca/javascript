@@ -1,0 +1,5 @@
+services:
+  app:
+    image: registry.$DOMAIN_NAME/react-ssr-prod
+    ports:
+      - 80
