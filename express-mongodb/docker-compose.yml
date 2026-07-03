@@ -2,7 +2,6 @@ services:
   app:
     build:
       target: dev
-    image: registry.$DOMAIN_NAME/express-mongodb
     volumes:
       - ./src:/app
     ports:

@@ -9,7 +9,6 @@ services:
     ports:
       - 80:80
   app:
-    image: registry.$DOMAIN_NAME/express-mongodb-prod
     build:
       target: prod
     restart: always

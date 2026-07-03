@@ -4,6 +4,7 @@ services:
       context: .
       args:
         NODE_IMAGE:
+    image: $IMAGE
     depends_on:
       - db
     environment:

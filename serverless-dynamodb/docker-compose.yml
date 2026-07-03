@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         NODE_IMAGE:
-    image: registry.$DOMAIN_NAME/serverless-dynamodb
+    image: $IMAGE
     ports:
       - 80:3000
     volumes:

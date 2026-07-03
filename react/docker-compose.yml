@@ -2,7 +2,6 @@ services:
   app:
     build:
       target: dev
-    image: registry.$DOMAIN_NAME/movie:react
     ports:
       - 80:$PORT
     volumes:
