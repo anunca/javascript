@@ -16,5 +16,5 @@ prod
 export ENV=prod
 ```
 ```sh
-docker compose exec app npm i -D nodemon
+docker compose exec app npm install -D nodemon
 ```
