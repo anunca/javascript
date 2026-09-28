@@ -1,4 +1,4 @@
-.PHONY: help config build start stop restart run shell logs ps clean
+.PHONY: help config build start stop restart run shell logs ps smoke clean
 .DEFAULT_GOAL := help
 
 include .env.local
@@ -44,3 +44,14 @@ ps: ## List containers
 
 clean: ## Remove containers and volumes
 	$(dc) down -t0 --volumes --remove-orphans
+
+##@ Test
+smoke: ## Verify HTTP application readiness
+	@for attempt in $$(seq 1 30); do \
+		if $(dc) exec -T db mongosh --quiet --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)' >/dev/null 2>&1 \
+			&& curl --fail --silent --show-error http://localhost:3000/ >/dev/null; then exit 0; fi; \
+		sleep 2; \
+	done; \
+	$(MAKE) ps; \
+	$(dc) logs --no-color || true; \
+	exit 1

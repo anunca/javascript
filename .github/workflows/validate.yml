@@ -33,8 +33,16 @@ jobs:
 
   build:
     needs: [config, dockerfile-lint]
-    runs-on: ubuntu-26.04
+    # MongoDB 8.x does not support the Ubuntu 26.04 runner kernel yet.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - name: Build images
         run: make -C express-mongodb build
+      - name: Start application
+        run: make -C express-mongodb start
+      - name: Smoke test application
+        run: make -C express-mongodb smoke
+      - name: Clean up
+        if: always()
+        run: make -C express-mongodb clean
