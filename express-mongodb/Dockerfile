@@ -4,14 +4,15 @@ FROM $NODE_IMAGE AS dev
 
 WORKDIR /app
 
+COPY src/package.json .
+RUN npm install
+
 ENTRYPOINT [ "npm" ]
 CMD [ "run", "start:dev" ]
 
 FROM dev AS prod
 
-COPY src/package.json .
-
-RUN npm install --omit=dev
+RUN npm prune --omit=dev
 
 COPY src .
 
