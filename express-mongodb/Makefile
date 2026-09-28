@@ -45,7 +45,8 @@ ps: ## List containers
 ##@ Test
 smoke: ## Verify HTTP application readiness
 	@for attempt in $(seq 1 30); do \
-		if curl --fail --silent --show-error http://localhost:3000/ >/dev/null; then exit 0; fi; \
+		if $(dc) exec -T db mongosh --quiet --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)' >/dev/null 2>&1 \
+			&& curl --fail --silent --show-error http://localhost:3000/ >/dev/null; then exit 0; fi; \
 		sleep 2; \
 	done; \
 	$(MAKE) ps; \
