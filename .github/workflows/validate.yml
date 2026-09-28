@@ -38,3 +38,10 @@ jobs:
       - uses: actions/checkout@v7
       - name: Build images
         run: make -C express-mongodb build
+      - name: Start application
+        run: make -C express-mongodb start
+      - name: Smoke test application
+        run: make -C express-mongodb smoke
+      - name: Clean up
+        if: always()
+        run: make -C express-mongodb clean
