@@ -44,7 +44,7 @@ ps: ## List containers
 
 ##@ Test
 smoke: ## Verify HTTP application readiness
-	@for attempt in $(seq 1 30); do \
+	@for attempt in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do \
 		if $(dc) exec -T db mongosh --quiet --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)' >/dev/null 2>&1 \
 			&& curl --fail --silent --show-error http://localhost:3000/ >/dev/null; then exit 0; fi; \
 		sleep 2; \
