@@ -1,7 +1,9 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /
+    directories:
+      - /express-mongodb/src
+      - /npm
     schedule:
       interval: weekly
   - package-ecosystem: github-actions
@@ -9,6 +11,7 @@ updates:
     schedule:
       interval: monthly
   - package-ecosystem: docker
-    directory: /
+    directories:
+      - /express-mongodb
     schedule:
       interval: monthly
